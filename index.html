@@ -1,190 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diya Kadadi — Mechanical Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #05080f;
+      --bg2: #080d1a;
+      --surface: #0d1424;
+      --surface2: #111928;
+      --border: rgba(100, 160, 255, 0.12);
+      --border-hover: rgba(100, 160, 255, 0.4);
+      --accent: #4f8fff;
+      --accent2: #7eb8ff;
+      --accent3: #a0cfff;
+      --gold: #c8a96e;
+      --text: #e8edf5;
+      --text2: #8a9bb8;
+      --text3: #5a6d8a;
+      --gradient: linear-gradient(135deg, #4f8fff, #a0cfff);
+      --glow: 0 0 40px rgba(79, 143, 255, 0.15);
+    }
 
-import React from "react";
-import { motion } from "framer-motion";
-import { Card, CardContent } from "../components/ui/card";
-import { Button } from "../components/ui/button";
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-// Reusable section component
-const Section = ({ children, className, id }) => (
-  <section id={id} className={`max-w-6xl mx-auto px-6 py-24 ${className || ""}`}>
-    {children}
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── BACKGROUND TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 0%, rgba(30, 60, 140, 0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 100%, rgba(20, 50, 120, 0.12) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── GRID OVERLAY ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(79, 143, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79, 143, 255, 0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1.2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(5, 8, 15, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; }
+    .nav-links a {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text2);
+      text-decoration: none;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--accent2); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 7rem 3rem;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 8rem;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 10vw, 8rem);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 0.85rem;
+      color: var(--text2);
+      max-width: 520px;
+      margin-bottom: 3rem;
+      line-height: 1.8;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.6s forwards;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.7s forwards;
+    }
+
+    .badge {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text2);
+      background: rgba(79, 143, 255, 0.05);
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.9s forwards;
+    }
+
+    .btn {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.9rem 2rem;
+      text-decoration: none;
+      border: 1px solid;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border-radius: 2px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+    }
+    .btn-primary:hover {
+      background: var(--accent2);
+      border-color: var(--accent2);
+      box-shadow: 0 0 30px rgba(79, 143, 255, 0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: var(--border-hover);
+      color: var(--text2);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent2);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 3rem;
+      left: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1.2s forwards;
+    }
+
+    .hero-scroll-line {
+      width: 40px;
+      height: 1px;
+      background: var(--text3);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-scroll-line::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: var(--accent);
+      animation: slideRight 2s ease 1.5s infinite;
+    }
+
+    .hero-scroll span {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text3);
+    }
+
+    /* ── STAT ROW ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-bottom: 4rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1s forwards;
+    }
+
+    .stat {
+      background: var(--bg);
+      padding: 1.5rem 2rem;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: var(--accent2);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text3);
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── FEATURED CARD ── */
+    .featured-card {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      margin-bottom: 1.5rem;
+    }
+
+    .featured-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .featured-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: var(--glow);
+    }
+
+    .featured-card:hover::before { opacity: 1; }
+
+    .featured-tag {
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding: 0.25rem 0.7rem;
+      border: 1px solid rgba(79, 143, 255, 0.3);
+      border-radius: 2px;
+      display: inline-block;
+      margin-bottom: 1.2rem;
+    }
+
+    .featured-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .featured-desc {
+      font-size: 0.8rem;
+      color: var(--text2);
+      max-width: 600px;
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .featured-col-title {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .featured-col-text {
+      font-size: 0.75rem;
+      color: var(--text2);
+      line-height: 1.6;
+    }
+
+    /* ── PROJECT GRID ── */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--surface);
+      padding: 2rem;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--gradient);
+      transition: width 0.4s ease;
+    }
+
+    .project-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: var(--glow);
+    }
+
+    .project-card:hover::after { width: 100%; }
+
+    .project-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--text3);
+      margin-bottom: 0.8rem;
+    }
+
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      color: var(--text);
+    }
+
+    .project-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .project-bullets li {
+      font-size: 0.72rem;
+      color: var(--text2);
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .project-bullets li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.65rem;
+    }
+
+    /* ── EXPERIENCE ── */
+    .exp-timeline { display: flex; flex-direction: column; gap: 0; }
+
+    .exp-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 3rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .exp-item:first-child { border-top: 1px solid var(--border); }
+
+    .exp-meta { padding-top: 0.2rem; }
+
+    .exp-date {
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .exp-org {
+      font-size: 0.7rem;
+      color: var(--text3);
+      line-height: 1.4;
+    }
+
+    .exp-role {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.8rem;
+      line-height: 1.3;
+    }
+
+    .exp-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .exp-bullets li {
+      font-size: 0.75rem;
+      color: var(--text2);
+      padding-left: 1.2rem;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .exp-bullets li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--text3);
+      font-size: 0.65rem;
+    }
+
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .skill-block {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem;
+      background: var(--surface);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .skill-block:hover {
+      border-color: var(--border-hover);
+      box-shadow: var(--glow);
+    }
+
+    .skill-block-title {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .skill-tag {
+      font-size: 0.62rem;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text2);
+      background: rgba(79, 143, 255, 0.04);
+      transition: all 0.2s;
+    }
+
+    .skill-tag:hover {
+      border-color: rgba(79, 143, 255, 0.4);
+      color: var(--accent2);
+    }
+
+    /* ── EDUCATION ── */
+    .edu-card {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      padding: 2.5rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: start;
+      transition: border-color 0.3s;
+    }
+
+    .edu-card:hover { border-color: var(--border-hover); }
+
+    .edu-school {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: 0.3rem;
+    }
+
+    .edu-degree {
+      font-size: 0.75rem;
+      color: var(--text2);
+      margin-bottom: 1rem;
+    }
+
+    .edu-honor {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      padding: 0.3rem 0.8rem;
+      border: 1px solid rgba(200, 169, 110, 0.3);
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+
+    .edu-honor::before { content: '★'; font-size: 0.5rem; }
+
+    .edu-courses-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 0.5rem;
+    }
+
+    .edu-courses {
+      font-size: 0.7rem;
+      color: var(--text2);
+      line-height: 1.7;
+    }
+
+    .edu-gpa {
+      text-align: right;
+    }
+
+    .edu-gpa-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      color: var(--accent2);
+      display: block;
+      line-height: 1;
+    }
+
+    .edu-gpa-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text3);
+    }
+
+    .edu-gpa-dates {
+      font-size: 0.65rem;
+      color: var(--text3);
+      margin-top: 0.5rem;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      text-align: center;
+      padding-bottom: 8rem;
+    }
+
+    .contact-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 300;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+
+    .contact-title em {
+      font-style: italic;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .contact-sub {
+      font-size: 0.8rem;
+      color: var(--text2);
+      margin-bottom: 3rem;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideRight {
+      from { left: -100%; }
+      to   { left: 100%; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      section { padding: 5rem 1.5rem; }
+      .hero-name { font-size: clamp(3rem, 12vw, 5rem); }
+      .stat-row { grid-template-columns: repeat(2, 1fr); }
+      .project-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .featured-grid { grid-template-columns: 1fr; }
+      .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .edu-card { grid-template-columns: 1fr; }
+      .edu-gpa { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">DK</span>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <p class="hero-eyebrow">Mechanical Engineer · UC Berkeley</p>
+    <h1 class="hero-name">Diya<br /><em>Kadadi</em></h1>
+    <p class="hero-sub">
+      Specializing in electromechanical systems, data-driven modeling, and medical device engineering.
+      Regents' and Chancellor's Scholar. Open to internships &amp; research.
+    </p>
+    <div class="hero-badges">
+      <span class="badge">Embedded Systems</span>
+      <span class="badge">Medical Devices</span>
+      <span class="badge">FEA Simulation</span>
+      <span class="badge">SolidWorks</span>
+      <span class="badge">Python / MATLAB</span>
+      <span class="badge">Polymer Synthesis</span>
+      <span class="badge">SPC / Six Sigma</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="#contact" class="btn btn-outline">Get In Touch</a>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll</span>
+    </div>
   </section>
-);
 
-// Gradient text title
-const GradientTitle = ({ children }) => (
-  <h2 className="text-4xl font-bold mb-12 bg-gradient-to-r from-blue-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent">
-    {children}
-  </h2>
-);
+  <div class="divider"></div>
 
-export default function Portfolio() {
-  return (
-    <div className="bg-gradient-to-b from-gray-950 via-gray-950 to-black text-white font-sans">
+  <!-- ABOUT / EDUCATION -->
+  <section id="about">
+    <div class="section-header reveal">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Education</h2>
+      <div class="section-line"></div>
+    </div>
 
-      {/* NAVIGATION */}
-      <div className="fixed top-0 w-full bg-gray-900/70 backdrop-blur border-b border-gray-800 z-50">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <span className="font-bold text-blue-400">DK</span>
-          <div className="space-x-6 text-sm text-gray-300">
-            <a href="#projects" className="hover:text-blue-400">Projects</a>
-            <a href="#experience" className="hover:text-blue-400">Experience</a>
-            <a href="#skills" className="hover:text-blue-400">Skills</a>
-            <a href="#contact" className="hover:text-blue-400">Contact</a>
-          </div>
+    <div class="edu-card reveal">
+      <div>
+        <div class="edu-school">University of California, Berkeley</div>
+        <div class="edu-degree">BS in Mechanical Engineering — Minor in Public Policy</div>
+        <div class="edu-honor">Regents' &amp; Chancellor's Scholar — Top 200 / 125,000 Applicants</div>
+        <div class="edu-courses-label">Relevant Coursework</div>
+        <div class="edu-courses">
+          Electronics for IoT · Engineering Dynamics · 3D Modeling for Design ·
+          Solid Mechanics · Designing for the Human Body · Organic Chemistry ·
+          MATLAB &amp; Python · Biochemistry · Negotiations · Foreign Policy
+        </div>
+      </div>
+      <div class="edu-gpa">
+        <span class="edu-gpa-num">3.66</span>
+        <div class="edu-gpa-label">GPA / 4.00</div>
+        <div class="edu-gpa-dates">Aug 2024 – May 2028</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FEATURED PROJECT -->
+  <section>
+    <div class="section-header reveal">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Featured Work</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="featured-card reveal">
+      <span class="featured-tag">Capstone · Embedded Systems · Medical Device</span>
+      <div class="featured-title">ACL Smart Brace — Embedded Recovery System</div>
+      <p class="featured-desc">
+        Designed an ACL brace as an electromechanical embedded system integrating IMU, flex, and EMG sensors
+        to monitor joint kinematics in real time. Built a complete hardware prototype with lateral knee support
+        and embedded signal-processing algorithms for clinical-grade gait analysis.
+      </p>
+      <div class="featured-grid">
+        <div>
+          <div class="featured-col-title">System Design</div>
+          <div class="featured-col-text">Multi-sensor architecture, SolidWorks enclosure, embedded hardware integration</div>
+        </div>
+        <div>
+          <div class="featured-col-title">Signal Processing</div>
+          <div class="featured-col-text">IMU fusion, EMG filtering, flex-sensor calibration, real-time data pipeline</div>
+        </div>
+        <div>
+          <div class="featured-col-title">Clinical Impact</div>
+          <div class="featured-col-text">Real-time recovery monitoring, gait metrics, knee kinematic characterization</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-header reveal">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Engineering Projects</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="project-grid">
+
+      <div class="project-card reveal">
+        <div class="project-num">01 / Wind Energy</div>
+        <div class="project-title">Wind Turbine Design &amp; Testing</div>
+        <ul class="project-bullets">
+          <li>Design, 3D-print, and test a functional turbine in SolidWorks within strict DFM constraints</li>
+          <li>FEA simulation to predict tower stress distribution and identify failure regions</li>
+          <li>Validate structural integrity against physical stiffness tests via load vs. deflection R² correlation</li>
+          <li>Characterize generator power output across resistance sweep at 25 mph to identify peak efficiency</li>
+        </ul>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">02 / Precision Mfg.</div>
+        <div class="project-title">Multi-Component Mechanical Vise</div>
+        <ul class="project-bullets">
+          <li>Assembled 6-part precision vise from engineering drawings using SolidWorks</li>
+          <li>Modeled all components (base, jaw, screw, handle, keys) in part files then fully mated assembly</li>
+          <li>Created rendered and exploded views with flow lines for engineering review documentation</li>
+          <li>Verified dimensional compatibility via tolerance analysis across all mating interfaces</li>
+        </ul>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">03 / Materials Science</div>
+        <div class="project-title">Hydrogel Adhesives Research</div>
+        <ul class="project-bullets">
+          <li>Organic synthesis of polymeric materials for fetal surgery, bone repair, and hemostatic applications</li>
+          <li>HPLC, NMR, and UV-Vis spectrophotometry to quantify polymer degradation profiles</li>
+          <li>Mechanical testing: lap shear, tensile, burst pressure, fatigue, rheology on biological substrates</li>
+          <li>DSC thermal analysis for glass transition and failure characterization — publication pending</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-header reveal">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Experience</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="exp-timeline">
+
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <span class="exp-date">Jun – Aug 2025</span>
+          <div class="exp-org">Recor Medical<br />Design Quality</div>
+        </div>
+        <div>
+          <div class="exp-role">Design Quality Intern</div>
+          <ul class="exp-bullets">
+            <li>Implemented Six Sigma and SPC principles to build a standardized, data-driven complaint investigation workflow enabling early identification of process bottlenecks</li>
+            <li>Used Python, JMP, and Excel to analyze .csv data and automate complaints trending — SPC dashboards transforming company-wide failure mode analysis and regulatory responses (CAPA &amp; NCMR)</li>
+            <li>Supported system-level engineering: requirements definition, dFMEA, and validation protocols</li>
+            <li>Designed and piloted a scalable complaints methodology for a $7M Quality Transformation initiative across 9 departments, emphasizing quantitative traceability and reporting</li>
+          </ul>
         </div>
       </div>
 
-      {/* HERO */}
-      <Section className="min-h-screen flex flex-col justify-center items-center text-center">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent"
-        >
-          Diya Kadadi
-        </motion.h1>
-        <p className="text-xl text-gray-300 max-w-2xl mb-6">
-          Mechanical Engineer @ UC Berkeley specializing in electromechanical systems, data-driven modeling, and medical device engineering.
-        </p>
-        <div className="flex gap-4">
-          <Button className="rounded-2xl bg-blue-500 hover:bg-blue-600">View Projects</Button>
-          <Button variant="outline" className="rounded-2xl border-gray-600 text-gray-300">Resume</Button>
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <span class="exp-date">Feb 2025 – Present</span>
+          <div class="exp-org">Messersmith Lab<br />Materials Science &amp; Engineering</div>
         </div>
-      </Section>
-
-      {/* FEATURED WORK */}
-      <Section>
-        <GradientTitle>Featured Work</GradientTitle>
-        <motion.div whileHover={{ scale: 1.02 }}>
-          <Card className="bg-gray-900/80 border border-gray-700 shadow-xl hover:shadow-blue-500/20 transition rounded-2xl">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-semibold mb-4 text-white">
-                ACL Smart Brace — Embedded System
-              </h3>
-              <p className="text-gray-400 mb-6">
-                Designed and built a wearable electromechanical system integrating IMU, EMG, and flex sensors to quantify rehabilitation metrics.
-              </p>
-              <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-300">
-                <div>
-                  <strong className="text-blue-400">System Design</strong>
-                  <p>Multi-sensor architecture + embedded hardware</p>
-                </div>
-                <div>
-                  <strong className="text-blue-400">Algorithms</strong>
-                  <p>Sensor fusion, EMG filtering, calibration</p>
-                </div>
-                <div>
-                  <strong className="text-blue-400">Impact</strong>
-                  <p>Real-time recovery monitoring + gait analysis</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </Section>
-
-      {/* PROJECTS */}
-      <Section id="projects">
-        <GradientTitle>Engineering Projects</GradientTitle>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[
-            {
-              title: "Wind Turbine Optimization",
-              bullets: [
-                "FEA-based stress + deformation modeling",
-                "Experimental validation (load vs deflection)",
-                "Power curve optimization vs resistance",
-              ],
-            },
-            {
-              title: "Mechanical Vise System",
-              bullets: [
-                "Full CAD assembly + tolerance analysis",
-                "Exploded technical schematics",
-                "Stress + failure region identification",
-              ],
-            },
-            {
-              title: "Hydrogel Adhesives",
-              bullets: [
-                "Polymer synthesis + degradation modeling",
-                "Mechanical testing (lap shear, tensile)",
-                "Reliability + failure characterization",
-              ],
-            },
-          ].map((proj, i) => (
-            <motion.div key={i} whileHover={{ scale: 1.05 }}>
-              <Card className="bg-gray-900/80 border border-gray-700 hover:border-blue-400 transition shadow-lg hover:shadow-blue-500/20 rounded-2xl">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4 text-white">{proj.title}</h3>
-                  <ul className="text-gray-400 text-sm space-y-2">
-                    {proj.bullets.map((b, j) => (
-                      <li key={j}>• {b}</li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+        <div>
+          <div class="exp-role">Undergraduate Researcher</div>
+          <ul class="exp-bullets">
+            <li>Synthesize, characterize, prototype, and iteratively optimize adhesive polymeric materials for medical applications including fetal surgery, bone repair, and hemostatic devices</li>
+            <li>Design HPLC, NMR, and UV-Vis spectrophotometry studies to quantify polymer degradation profiles</li>
+            <li>Analyze mechanical performance on biological substrates (lap shear, tensile, burst pressure, fatigue, rheology) to guide structural integrity improvements</li>
+            <li>Collaborate on implantable bioelectronic system integration — publication pending</li>
+          </ul>
         </div>
-      </Section>
-
-      {/* EXPERIENCE */}
-      <Section id="experience">
-        <GradientTitle>Experience</GradientTitle>
-        <div className="space-y-6">
-          <Card className="bg-gray-900/80 border border-gray-700 hover:border-blue-400 transition rounded-2xl">
-            <CardContent className="p-6">
-              <h3 className="font-semibold text-white">Recor Medical — Design Quality Intern</h3>
-              <p className="text-gray-400 text-sm mb-2">2025</p>
-              <p className="text-gray-300 text-sm">
-                Developed SPC-based analytics pipelines using Python + JMP to identify failure modes and support large-scale quality transformation.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gray-900/80 border border-gray-700 hover:border-blue-400 transition rounded-2xl">
-            <CardContent className="p-6">
-              <h3 className="font-semibold text-white">Messersmith Lab — Researcher</h3>
-              <p className="text-gray-400 text-sm mb-2">2025–Present</p>
-              <p className="text-gray-300 text-sm">
-                Conducted polymer synthesis and mechanical characterization of biocompatible adhesives using HPLC, NMR, and rheology.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </Section>
-
-      {/* SKILLS */}
-      <Section id="skills">
-        <GradientTitle>Technical Stack</GradientTitle>
-        <div className="grid md:grid-cols-3 gap-6">
-          {[
-            ["Modeling & Simulation", "MATLAB, FEA, Solid Mechanics"],
-            ["Programming", "Python, Java, Data Analysis"],
-            ["Experimental", "HPLC, NMR, Rheology, Mechanical Testing"],
-          ].map(([title, desc], i) => (
-            <Card key={i} className="bg-gray-900/80 border border-gray-700 hover:border-blue-400 transition rounded-2xl">
-              <CardContent className="p-6">
-                <h3 className="font-semibold mb-2 text-white">{title}</h3>
-                <p className="text-gray-400 text-sm">{desc}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      {/* CONTACT */}
-      <Section id="contact" className="text-center">
-        <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-          Contact
-        </h2>
-        <p className="text-gray-400 mb-6">Open to internships, research, and engineering roles.</p>
-        <Button className="rounded-2xl bg-blue-500 hover:bg-blue-600">Email Me</Button>
-      </Section>
+      </div>
 
     </div>
-  );
-}
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-header reveal">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Technical Stack</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="skills-grid">
+
+      <div class="skill-block reveal">
+        <div class="skill-block-title">CAD &amp; Simulation</div>
+        <div class="skill-tags">
+          <span class="skill-tag">SolidWorks</span>
+          <span class="skill-tag">FEA Simulation</span>
+          <span class="skill-tag">Solid Mechanics</span>
+          <span class="skill-tag">DFM</span>
+          <span class="skill-tag">Tolerance Analysis</span>
+        </div>
+      </div>
+
+      <div class="skill-block reveal">
+        <div class="skill-block-title">Programming &amp; Data</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">MATLAB</span>
+          <span class="skill-tag">Java</span>
+          <span class="skill-tag">JMP</span>
+          <span class="skill-tag">Power BI</span>
+          <span class="skill-tag">Excel</span>
+          <span class="skill-tag">SPC / Six Sigma</span>
+        </div>
+      </div>
+
+      <div class="skill-block reveal">
+        <div class="skill-block-title">Laboratory</div>
+        <div class="skill-tags">
+          <span class="skill-tag">HPLC</span>
+          <span class="skill-tag">NMR</span>
+          <span class="skill-tag">DSC</span>
+          <span class="skill-tag">Rheology</span>
+          <span class="skill-tag">Tensile Testing</span>
+          <span class="skill-tag">Lap Shear</span>
+          <span class="skill-tag">Burst Pressure</span>
+        </div>
+      </div>
+
+      <div class="skill-block reveal">
+        <div class="skill-block-title">Embedded &amp; Electronics</div>
+        <div class="skill-tags">
+          <span class="skill-tag">DAQ Systems</span>
+          <span class="skill-tag">Microcontrollers</span>
+          <span class="skill-tag">IMU / EMG Sensors</span>
+          <span class="skill-tag">Signal Processing</span>
+          <span class="skill-tag">Circuit Design</span>
+          <span class="skill-tag">RF Design</span>
+        </div>
+      </div>
+
+      <div class="skill-block reveal">
+        <div class="skill-block-title">Quality &amp; Regulatory</div>
+        <div class="skill-tags">
+          <span class="skill-tag">dFMEA</span>
+          <span class="skill-tag">CAPA</span>
+          <span class="skill-tag">NCMR</span>
+          <span class="skill-tag">Validation Protocols</span>
+          <span class="skill-tag">Requirements Definition</span>
+        </div>
+      </div>
+
+      <div class="skill-block reveal">
+        <div class="skill-block-title">Soft Skills &amp; Languages</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Technical Policy</span>
+          <span class="skill-tag">Negotiations</span>
+          <span class="skill-tag">Stakeholder Alignment</span>
+          <span class="skill-tag">Spanish</span>
+          <span class="skill-tag">PowerPoint</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-title reveal">Let's <em>build</em><br />something.</div>
+    <p class="contact-sub reveal">Open to internships, research collaborations, and engineering roles.</p>
+    <div class="contact-links reveal">
+      <a href="mailto:kadadi@berkeley.edu" class="btn btn-primary">kadadi@berkeley.edu</a>
+      <a href="tel:4083338660" class="btn btn-outline">(408) 333-8660</a>
+      <a href="https://www.linkedin.com/in/diya-kadadi" target="_blank" rel="noopener" class="btn btn-outline">LinkedIn</a>
+    </div>
+  </section>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry, i) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => entry.target.classList.add('visible'), i * 80);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
